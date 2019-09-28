@@ -7,13 +7,8 @@ namespace BankApp
         static void Main(string[] args)
         {
             //Instance of an account == object
-            var account = new Account
-            {
-                EmailAddress = "test@test.com",
-                AccountType = "Checking"
-            };
-
-            account.Deposit(2034.56M);
+            var account = Bank.CreateAccount("test@test.com", 
+                TypeOfAccounts.Checking, 245);
 
             Console.WriteLine($"AN: {account.AccountNumber}, " +
                 $"Balance: {account.Balance:C}, " +
@@ -21,7 +16,8 @@ namespace BankApp
                 $"EA:{account.EmailAddress}, " +
                 $"CD: {account.CreatedDate}");
 
-            var account2 = new Account();
+            var account2 = Bank.CreateAccount("test1@test.com",
+                TypeOfAccounts.Savings, 0);
             Console.WriteLine($"AN: {account2.AccountNumber}, " +
                 $"Balance: {account2.Balance}, " +
                 $"AT: {account2.AccountType}, " +

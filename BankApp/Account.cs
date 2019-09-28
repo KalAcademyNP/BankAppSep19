@@ -4,6 +4,14 @@ using System.Text;
 
 namespace BankApp
 {
+    enum TypeOfAccounts
+    {
+        Checking,
+        Savings,
+        CD,
+        Loan
+    }
+
     /// <summary>
     /// This is a bank account
     /// where a user can deposit 
@@ -24,7 +32,7 @@ namespace BankApp
         /// </summary>
         public int AccountNumber { get; }
 
-        public string AccountType { get; set; }
+        public TypeOfAccounts AccountType { get; set; }
         public decimal Balance { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
@@ -47,6 +55,11 @@ namespace BankApp
         public void Deposit(decimal amount)
         {
             Balance += amount;
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            Balance -= amount;
         }
         #endregion
     }
