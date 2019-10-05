@@ -23,6 +23,23 @@ namespace BankApp
                         Console.WriteLine("Thank you for visiting my bank!");
                         return;
                     case "1":
+                        Console.Write("Email Address: ");
+                        var email = Console.ReadLine();
+                        Console.WriteLine("Account type: ");
+                        //Convert enum to array
+                        var accountTypes = 
+                            Enum.GetNames(typeof(TypeOfAccounts));
+                        //Loop through the array and print out
+                        for(var i = 0; i < accountTypes.Length; i++)
+                        {
+                            Console.WriteLine($"{i}. {accountTypes[i]}");
+                        }
+                        var accountType = Enum.Parse<TypeOfAccounts>(Console.ReadLine());
+                        Console.Write("Initial Deposit: ");
+                        var amount = Convert.ToDecimal(Console.ReadLine());
+
+                        var account = Bank.CreateAccount(email, accountType, amount);
+                        Console.WriteLine($"AN: {account.AccountNumber}, CD: {account.CreatedDate}, AT: {account.AccountType}, B: {account.Balance:C}, EA: {account.EmailAddress}");
                         break;
                     case "2":
                         break;
