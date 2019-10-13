@@ -42,10 +42,28 @@ namespace BankApp
                         Console.WriteLine($"AN: {account.AccountNumber}, CD: {account.CreatedDate}, AT: {account.AccountType}, B: {account.Balance:C}, EA: {account.EmailAddress}");
                         break;
                     case "2":
+                        PrintAllAccounts();
+                        Console.Write("Account number: ");
+                        var accountNumber = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Amount to deposit: ");
+                        amount = Convert.ToDecimal(Console.ReadLine());
+                        Bank.Deposit(accountNumber, amount);
+
+                        Console.WriteLine("Deposit completed successfuly!");
+
                         break;
                     case "3":
+                        PrintAllAccounts();
+                        Console.Write("Account number: ");
+                        accountNumber = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Amount to withdraw: ");
+                        amount = Convert.ToDecimal(Console.ReadLine());
+                        Bank.Withdraw(accountNumber, amount);
+
+                        Console.WriteLine("Withdrawal completed successfuly!");
                         break;
                     case "4":
+                        PrintAllAccounts();
                         break;
                     default:
                         Console.WriteLine("Please select a valid option!");
@@ -54,6 +72,18 @@ namespace BankApp
             }
 
 
+        }
+
+        private static void PrintAllAccounts()
+        {
+            Console.Write("Email Address: ");
+            var emailAddress = Console.ReadLine();
+            var accounts =
+                Bank.GetAllAccountsByEmailAddress(emailAddress);
+            foreach (var myAccount in accounts)
+            {
+                Console.WriteLine($"AN: {myAccount.AccountNumber}, CD: {myAccount.CreatedDate}, AT: {myAccount.AccountType}, B: {myAccount.Balance:C}, EA: {myAccount.EmailAddress}");
+            }
         }
     }
 }
