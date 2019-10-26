@@ -33,6 +33,9 @@ namespace BankApp
                 entity.Property(a => a.AccountType)
                     .IsRequired();
 
+                entity.Property(a => a.AccountName)
+                    .HasMaxLength(200);
+
                 entity.ToTable("Accounts"); ;
             });
 

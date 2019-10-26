@@ -15,6 +15,7 @@ namespace BankApp
                 Console.WriteLine("2. Deposit");
                 Console.WriteLine("3. Withdraw");
                 Console.WriteLine("4. Print all accounts");
+                Console.WriteLine("5. Print all transactions");
 
                 var option = Console.ReadLine();
                 switch(option)
@@ -25,6 +26,10 @@ namespace BankApp
                     case "1":
                         Console.Write("Email Address: ");
                         var email = Console.ReadLine();
+
+                        Console.Write("Account Name: ");
+                        var accountName = Console.ReadLine();
+
                         Console.WriteLine("Account type: ");
                         //Convert enum to array
                         var accountTypes = 
@@ -37,8 +42,7 @@ namespace BankApp
                         var accountType = Enum.Parse<TypeOfAccounts>(Console.ReadLine());
                         Console.Write("Initial Deposit: ");
                         var amount = Convert.ToDecimal(Console.ReadLine());
-
-                        var account = Bank.CreateAccount(email, accountType, amount);
+                        var account = Bank.CreateAccount(accountName, email, accountType, amount);
                         Console.WriteLine($"AN: {account.AccountNumber}, CD: {account.CreatedDate}, AT: {account.AccountType}, B: {account.Balance:C}, EA: {account.EmailAddress}");
                         break;
                     case "2":
@@ -64,6 +68,19 @@ namespace BankApp
                         break;
                     case "4":
                         PrintAllAccounts();
+                        break;
+
+                    case "5":
+                        PrintAllAccounts();
+                        Console.Write("Account number: ");
+                        accountNumber = Convert.ToInt32(Console.ReadLine());
+
+                        var transactions =
+                            Bank.GetAllTransactionsByAccountNumber(accountNumber);
+                        foreach (var transaction in transactions)
+                        {
+                            Console.WriteLine($"ID: {transaction.Id}, Date: {transaction.TransactionDate}, TT: {transaction.TransactionType}, Amount: {transaction.Amount:C}, AN: {transaction.AccountNumber}, B: {transaction.Balance:C}");
+                        }
                         break;
                     default:
                         Console.WriteLine("Please select a valid option!");
