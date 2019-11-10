@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BankApp;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankUI.Controllers
 {
+    [Authorize]
     public class AccountsController : Controller
     {
         private readonly BankContext _context = new BankContext();
@@ -17,7 +19,7 @@ namespace BankUI.Controllers
         // GET: Accounts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Accounts.ToListAsync());
+            return View(Bank.GetAllAccountsByEmailAddress(HttpContext.User.Identity.Name));
         }
 
         // GET: Accounts/Details/5
@@ -49,12 +51,15 @@ namespace BankUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmailAddress,AccountNumber,AccountName,AccountType,Balance,CreatedDate")] Account account)
+        public async Task<IActionResult> Create(
+            [Bind("EmailAddress,AccountName,AccountType")]
+            Account account)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(account);
-                await _context.SaveChangesAsync();
+                Bank.CreateAccount(account.AccountName,
+                    account.EmailAddress,
+                    account.AccountType);
                 return RedirectToAction(nameof(Index));
             }
             return View(account);
