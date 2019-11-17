@@ -30,6 +30,24 @@ namespace BankApp
             return account;
         }
 
+        public static Account 
+            GetAccountByAccountNumber(int accountNumber)
+        {
+            return db.Accounts.Find(accountNumber);
+        }
+
+        public static void UpdateAccount(Account updatedAccount)
+        {
+            var oldAccount = GetAccountByAccountNumber(
+                updatedAccount.AccountNumber);
+            oldAccount.EmailAddress = updatedAccount.EmailAddress;
+            oldAccount.AccountName = updatedAccount.AccountName;
+            oldAccount.AccountType = updatedAccount.AccountType;
+
+            db.SaveChanges();
+
+        }
+
         public static IEnumerable<Account> 
             GetAllAccountsByEmailAddress(string emailAddress)
         {
