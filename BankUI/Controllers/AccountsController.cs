@@ -7,15 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BankApp;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace BankUI.Controllers
 {
     [Authorize]
     public class AccountsController : Controller
     {
-        private readonly BankContext _context = new BankContext();
-
-
         // GET: Accounts
         public async Task<IActionResult> Index()
         {
@@ -96,31 +94,35 @@ namespace BankUI.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    Bank.UpdateAccount(account);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccountExists(account.AccountNumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                Bank.UpdateAccount(account);
                 return RedirectToAction(nameof(Index));
             }
             return View(account);
         }
 
- 
-
-        private bool AccountExists(int id)
+        //Get
+        public IActionResult Deposit(int? id)
         {
-            return _context.Accounts.Any(e => e.AccountNumber == id);
+            if (id == null)
+                return NotFound();
+
+            var account = Bank.GetAccountByAccountNumber(id.Value);
+            if (account == null)
+                return NotFound();
+
+            return View(account);
+        }
+
+        [HttpPost]
+        public IActionResult Deposit(IFormCollection controls)
+        {
+            var accountNumber = 
+                Convert.ToInt32(controls["AccountNumber"]);
+
+            var amount = Convert.ToDecimal(controls["Amount"]);
+            Bank.Deposit(accountNumber, amount);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
