@@ -51,6 +51,11 @@ namespace BankApp
         public static IEnumerable<Account> 
             GetAllAccountsByEmailAddress(string emailAddress)
         {
+            if (string.IsNullOrEmpty(emailAddress) 
+                || string.IsNullOrWhiteSpace(emailAddress))
+            {
+                throw new ArgumentNullException("emailAddress", "Email Address is required!");
+            }
             return db.Accounts.Where(a => a.EmailAddress == emailAddress);
         }
 
