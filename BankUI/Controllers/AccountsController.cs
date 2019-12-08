@@ -14,10 +14,16 @@ namespace BankUI.Controllers
     [Authorize]
     public class AccountsController : Controller
     {
+        public string Username { get; set; }
         // GET: Accounts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(Bank.GetAllAccountsByEmailAddress(HttpContext.User.Identity.Name));
+            if (HttpContext != null && 
+                !string.IsNullOrEmpty(HttpContext.User.Identity.Name))
+            {
+                Username = HttpContext.User.Identity.Name;
+            }
+            return View(Bank.GetAllAccountsByEmailAddress(Username));
         }
 
         // GET: Accounts/Details/5
@@ -124,5 +130,42 @@ namespace BankUI.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        //Get
+        public IActionResult Withdraw(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var account = Bank.GetAccountByAccountNumber(id.Value);
+            if (account == null)
+                return NotFound();
+
+            return View(account);
+        }
+
+        [HttpPost]
+        public IActionResult Withdraw(IFormCollection controls)
+        {
+            var accountNumber =
+                Convert.ToInt32(controls["AccountNumber"]);
+
+            var amount = Convert.ToDecimal(controls["Amount"]);
+            Bank.Withdraw(accountNumber, amount);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Transactions(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var transactions = 
+                Bank.GetAllTransactionsByAccountNumber(id.Value);
+
+            return View(transactions);
+        }
+
     }
 }

@@ -7,3 +7,7 @@
 /BankApp/obj
 /BankUI/bin/Debug/netcoreapp2.2
 /BankUI/obj
+/BankApp/bin/Release/netcoreapp2.2
+/BankTest/bin/Debug/netcoreapp2.2
+/BankTest/obj
+/BankUI/bin/Release/netcoreapp2.2
